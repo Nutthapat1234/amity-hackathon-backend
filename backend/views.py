@@ -43,7 +43,7 @@ class GenerateMenuImage(generics.CreateAPIView):
         except ValidationError as validate_err:
             return JsonResponse(validate_err.detail, status=validate_err.status_code)
 
-class generateCookingInstractionImages(generics.CreateAPIView):
+class GenerateCookingInstractionImages(generics.CreateAPIView):
     serializer_class = GetCookingTnstrctionImageSerialzer
 
     def post(self, request, *args, **kwargs):
@@ -83,5 +83,4 @@ class GenerateMenu(generics.ListCreateAPIView):
         for food in json_obj['Recipes']:
             foods.append(food['Name'])
         result = generate_image_list("name", foods)
-        print(result)
         return JsonResponse(result)
