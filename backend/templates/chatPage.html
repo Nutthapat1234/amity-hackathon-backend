@@ -1,16 +1,147 @@
 <!DOCTYPE html>
 <html>
 
+<head>
+    <style>
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            overflow: hidden;
+            overflow-y: auto;
+        }
+
+        .column {
+            flex: 1;
+            margin: 10px;
+            padding: 10px;
+            background-color: #f9f9f9;
+        }
+
+        .loading {
+            cursor: progress;
+            opacity: 0.5;
+        }
+
+        #loader {
+            border: 16px solid #f3f3f3;
+            border-top: 16px solid #3498db;
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Hide the loader by default */
+        #loader {
+            display: none;
+        }
+
+        input,
+        button {
+            font-size: 30px;
+            width: 20%;
+            height: 80px;
+            padding: 10px;
+            box-sizing: border-box;
+            border-radius: 5px;
+            margin-left: 20px;
+            margin-bottom: 20px;
+        }
+    </style>
+
+</head>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>
+    var state = 'input-ingredients'
+    function on_click() {
+        document.getElementById("loader").style.display = "block";
+        context_a = document.getElementById("inputField").value;
+        context_b = document.getElementById("cookingTypeField").value;
+        $.ajax({
+            type: "POST",
+            url: "http://127.0.0.1:8000/send-message",
+            data: {
+                "InputField": context_a,
+                "cookingTypeField": context_b,
+                "State": state
+            },   /* Passing the text data */
+            success: function (response) {
+                document.getElementById("inputField").value = "";
+                if (response.state == "reselect-menu" || response.state == "select-menu"){
+                    document.getElementById("inputField").setAttribute("placeholder", "Enter Receipe Number");
+                    document.getElementById("cookingTypeField").style.display = "none"
+                }
+
+                if (response.state == "invalid-input") {
+                    alert(response.html)
+                }
+                else if (response.state == "reselect-menu") {
+                    document.querySelector('#select-menu-section').innerHTML = response.html;
+                    state = response.state
+                }
+                else {
+                    var div = document.createElement("div");
+                    div.id = `${state}-section`
+                    div.innerHTML = response.html;
+                    state = response.state
+                    document.querySelector("#id_chat_item_container").appendChild(div);
+                }
+                document.getElementById("loader").style.display = "none";
+            },
+            error: function (request, status, error) {
+                document.getElementById("inputField").setAttribute("placeholder", "Remaining ingredients");
+                document.getElementById("inputField").value = "";
+                document.getElementById("cookingTypeField").value = "";
+                document.getElementById("loader").style.display = "none";
+                alert("Ahhhhh Check your Input Again. I think some think worng!");
+            }
+        });
+    }
+    function on_click_clean() {
+        document.getElementById("inputField").value = "";
+        document.getElementById("cookingTypeField").style.display = "block"
+        document.getElementById("cookingTypeField").value = "";
+        menu_section = document.querySelector('#input-ingredients-section');
+        if (menu_section) {
+            menu_section.remove()
+        }
+        instraction_section = document.querySelector('#select-menu-section');
+        if (instraction_section) {
+            instraction_section.remove()
+        }
+        state = "input-ingredients"
+    }
+</script>
+
 <body>
     <center>
         <h1>Hello , Welcome to my chat site ! {{request.user}}</h1>
     </center>
-    <br>
-    <form method="POST" action="/send-message">
-        <input type="text" name="textfield">
-        <button type="submit">Send Message</button>
-    </form>
+    <div id="id_chat_item_container" style="font-size: 20px">
+        <br>
+        <center>
+            <input type="text" id="inputField" placeholder="Remaining ingredients">
+            <input type="text" id="cookingTypeField" placeholder="Cooking Style">
+            <button onclick="on_click();">Let Me Think!</button>
+            <button onclick="on_click_clean();">Clean The Desk!?</button>
+        </center>
 
+    </div>
+    <br>
+    <center>
+        <div id="loader"></div>
+    </center>
 </body>
 
 </html>
