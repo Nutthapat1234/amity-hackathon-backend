@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+    <center>
+        <h1>Hello , Welcome to my chat site ! {{request.user}}</h1>
+    </center>
+    <br>
+    <form method="POST" action="/send-message">
+        <input type="text" name="textfield">
+        <button type="submit">Send Message</button>
+    </form>
+
+</body>
+
+</html>

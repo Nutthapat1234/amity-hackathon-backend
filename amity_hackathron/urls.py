@@ -20,6 +20,8 @@ from backend.views import *
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("chat/", chatPage, name="chat-page"),
+    path("send-message", processMessage, name="send-message" ),
     path('get_menu', GenerateMenu.as_view(serializer_class=GetMenu), name='get-menu-images'),
     path('get_instruction', GenerateInstruction.as_view(serializer_class=GetInstruction), name='get-menu-images'),
     path("generate-menu-images", GenerateMenuImage.as_view(), name="get-menu-images"),
