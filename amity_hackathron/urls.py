@@ -20,6 +20,7 @@ from backend.views import *
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path('get_menu', GenerateMenu.as_view(serializer_class=GetMenu), name='get-menu-images'),
     path("generate-menu-images", name="get-menu-images"),
     path("generate-instraction-images", name="get-instactions-images"),
 ]
