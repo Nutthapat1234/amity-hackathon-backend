@@ -76,6 +76,7 @@ class GenerateMenu(generics.ListCreateAPIView):
             type_ = json_question['type']
             no_serving = json_question['no_serving']
             content = "answer me in the following json format only {\r\n  \"Recipes\": [\r\n    {\r\n      \"Name\": \"<Recipe name>\",\r\n      \"Nutrition\": {\r\n        \"Calories\": \"<Calories count>\",\r\n        \"Protein\": \"<Protein count>\",\r\n        \"Fat\": \"<Fat count>\",\r\n        \"Carbohydrates\": \"<Carbohydrates count>\",\r\n        \"Fiber\": \"<Fiber count>\"\r\n      }\r\n    }\r\n  ]\r\n} Give me 5 choices for "+ type_ + " I can cook with "+ receive_ingredient + " within 30 minutes for a serving of "+no_serving+". Also, show me the macro "
+            open_ai_api_secrect = settings.OPEN_AI_API_SECRECT
             message[0]['content'] = content
             completion = openai.ChatCompletion.create(
                model="gpt-3.5-turbo",  # this is "ChatGPT" $0.002 per 1k tokens
