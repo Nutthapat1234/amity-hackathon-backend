@@ -102,7 +102,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
+amity_hackathron/.env
 .venv
 env/
 venv/
