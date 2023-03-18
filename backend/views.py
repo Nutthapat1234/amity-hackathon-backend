@@ -54,7 +54,7 @@ def generate_instraction(context_a, context_b):
     if context_a.isnumeric() and ( 0 >= int(context_a) or int(context_a) > 5):
         return JsonResponse(
             data={
-                "html": "<p style='color: red;'>Invalid Order; Are You kidding me?<p>",
+                "html": "Invalid Order; Are You kidding me?",
                 "state": "invalid-input",
             }
         )

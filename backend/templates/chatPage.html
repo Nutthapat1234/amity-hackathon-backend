@@ -78,15 +78,18 @@
             },   /* Passing the text data */
             success: function (response) {
                 document.getElementById("inputField").value = "";
+                document.getElementById("loader").style.display = "none";
+                if (response.state == "invalid-input") {
+                    alert(response.html)
+                    return
+                }
+
                 if (response.state == "reselect-menu" || response.state == "select-menu"){
                     document.getElementById("inputField").setAttribute("placeholder", "Enter Receipe Number");
                     document.getElementById("cookingTypeField").style.display = "none"
                 }
 
-                if (response.state == "invalid-input") {
-                    alert(response.html)
-                }
-                else if (response.state == "reselect-menu") {
+                if (state == "reselect-menu") {
                     document.querySelector('#select-menu-section').innerHTML = response.html;
                     state = response.state
                 }
@@ -97,7 +100,6 @@
                     state = response.state
                     document.querySelector("#id_chat_item_container").appendChild(div);
                 }
-                document.getElementById("loader").style.display = "none";
             },
             error: function (request, status, error) {
                 document.getElementById("inputField").setAttribute("placeholder", "Remaining ingredients");
