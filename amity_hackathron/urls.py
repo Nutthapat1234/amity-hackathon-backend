@@ -17,10 +17,9 @@ from django.contrib import admin
 from django.urls import path
 
 from backend.views import *
-from backend.serializers import *
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path('menus/', GenerateMenuImage.as_view(serializer_class=GetMenuImages), name='get-menu-images')
-
+    path("generate-menu-images", name="get-menu-images"),
+    path("generate-instraction-images", name="get-instactions-images"),
 ]
